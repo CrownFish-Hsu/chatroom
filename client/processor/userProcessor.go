@@ -83,7 +83,12 @@ func (this *UserProcessor) Login(username string, password string) (err error) {
 
 	//显示当前用户列表
 	for _, v := range loginRes.UserLists {
-		fmt.Printf("online username %s\n", v)
+		// 过滤显示自己
+		if username == v {
+			continue
+		}
+
+		fmt.Printf("online username: %s\n", v)
 	}
 
 	go serverConnect(conn)
