@@ -10,7 +10,8 @@ import (
 )
 
 type UserProcessor struct {
-	Conn net.Conn
+	Conn     net.Conn
+	UserName string
 }
 
 func (this *UserProcessor) ServerProcessLogin(mes *message.Message) (err error) {
@@ -30,7 +31,15 @@ func (this *UserProcessor) ServerProcessLogin(mes *message.Message) (err error) 
 	user, err := model.MyUserDao.Login(loginMes.UserName, loginMes.UserPassword)
 	if err == nil {
 		loginResponseMes.Code = 200
-		fmt.Println(user)
+
+		// 用户登录成功，放进全局userMgr
+		this.UserName = user.UserName
+		userMgr.addOrEditOnlineUser(this)
+
+		//将username放入loginResponseMes UserLists
+		for k, _ := range userMgr.onlineUsers {
+			loginResponseMes.UserLists = append(loginResponseMes.UserLists, k)
+		}
 	} else {
 		switch err {
 		case model.ERROR_USER_NON_EXIST:

@@ -20,8 +20,9 @@ type Message struct {
 }
 
 type LoginResponseMessage struct {
-	Code  int    `json:"code"`
-	Error string `json:"error"`
+	Code      int      `json:"code"`
+	Error     string   `json:"error"`
+	UserLists []string `json:"userLists"`
 }
 
 // user结构体类型
