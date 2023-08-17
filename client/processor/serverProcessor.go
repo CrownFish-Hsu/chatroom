@@ -1,0 +1,47 @@
+package processor
+
+import (
+	"basic/chatroom/client/utils"
+	"fmt"
+	"net"
+	"os"
+)
+
+// 显示登陆成功后的列表
+func showMenu() {
+	fmt.Println("==========login success===========")
+	fmt.Println("==========1.Online User List======")
+	fmt.Println("==========2.Send SMS==============")
+	fmt.Println("==========3.SMS List==============")
+	fmt.Println("==========4.Exit==================")
+	fmt.Println("Please Select 1-4:")
+	var key int
+	fmt.Scanf("%d\n", &key)
+	switch key {
+	case 1:
+		fmt.Println("show user list")
+	case 2:
+		fmt.Println("send message")
+	case 3:
+		fmt.Println("list message")
+	case 4:
+		fmt.Println("exit")
+		os.Exit(0)
+	default:
+		fmt.Println("input error")
+	}
+}
+
+func serverConnect(conn net.Conn) {
+	tf := &utils.Transfer{Conn: conn}
+	for {
+		fmt.Println("client keep connection server")
+		message, err := tf.ReadPkg()
+		if err != nil {
+			fmt.Println("error =", err)
+			return
+		}
+
+		fmt.Println("message=", message)
+	}
+}
