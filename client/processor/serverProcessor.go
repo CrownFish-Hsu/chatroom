@@ -2,6 +2,8 @@ package processor
 
 import (
 	"basic/chatroom/client/utils"
+	"basic/chatroom/util/message"
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
@@ -19,6 +21,7 @@ func showMenu() {
 	fmt.Scanf("%d\n", &key)
 	switch key {
 	case 1:
+		outputOnlineUser()
 		fmt.Println("show user list")
 	case 2:
 		fmt.Println("send message")
@@ -36,12 +39,23 @@ func serverConnect(conn net.Conn) {
 	tf := &utils.Transfer{Conn: conn}
 	for {
 		fmt.Println("client keep connection server")
-		message, err := tf.ReadPkg()
+		mes, err := tf.ReadPkg()
 		if err != nil {
 			fmt.Println("error =", err)
 			return
 		}
 
-		fmt.Println("message=", message)
+		switch mes.Type {
+		case message.NotifyUserStatusMessageType:
+			//1. 取出NotifyUserStatusMessage
+			var notifyUserStatusMessage message.NotifyUserStatusMessage
+			err = json.Unmarshal([]byte(mes.Data), &notifyUserStatusMessage)
+
+			//2. 保存进client user map
+			updateUserStatus(&notifyUserStatusMessage)
+		default:
+			fmt.Println("mes type undefined, type = ", mes.Type)
+		}
+		fmt.Println("message=", mes)
 	}
 }

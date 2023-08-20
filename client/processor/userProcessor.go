@@ -2,6 +2,7 @@ package processor
 
 import (
 	"basic/chatroom/client/utils"
+	"basic/chatroom/server/model"
 	"basic/chatroom/util/message"
 	"encoding/binary"
 	"encoding/json"
@@ -88,6 +89,8 @@ func (this *UserProcessor) Login(username string, password string) (err error) {
 			continue
 		}
 
+		//完成client user online 初始化
+		onlineUsers[v] = &model.User{UserName: v, UserStatus: message.UserOnline}
 		fmt.Printf("online username: %s\n", v)
 	}
 

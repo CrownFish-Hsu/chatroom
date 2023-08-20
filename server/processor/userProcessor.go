@@ -35,7 +35,7 @@ func (this *UserProcessor) ServerProcessLogin(mes *message.Message) (err error) 
 		// 用户登录成功，放进全局userMgr
 		this.UserName = user.UserName
 		userMgr.addOrEditOnlineUser(this)
-
+		this.NotifyOthersOnlineUser(user.UserName)
 		//将username放入loginResponseMes UserLists
 		for k, _ := range userMgr.onlineUsers {
 			loginResponseMes.UserLists = append(loginResponseMes.UserLists, k)
@@ -122,4 +122,41 @@ func (this *UserProcessor) ServerProcessRegister(mes *message.Message) (err erro
 	tf := &utils.Transfer{Conn: this.Conn}
 	err = tf.WritePkg(data)
 	return
+}
+
+// userId通知其他用户上线
+func (this *UserProcessor) NotifyOthersOnlineUser(userName string) {
+	for name, up := range userMgr.onlineUsers {
+		if name == userName {
+			continue
+		}
+
+		up.notifyMeToOther(userName)
+	}
+}
+
+func (this *UserProcessor) notifyMeToOther(userName string) {
+	var mes message.Message
+	mes.Type = message.NotifyUserStatusMessageType
+
+	var notifyMes message.NotifyUserStatusMessage
+	notifyMes.UserName = userName
+	notifyMes.Status = message.UserOnline
+	data, err := json.Marshal(notifyMes)
+	if err != nil {
+		return
+	}
+	mes.Data = string(data)
+
+	data, err = json.Marshal(mes)
+	if err != nil {
+		return
+	}
+
+	tf := &utils.Transfer{Conn: this.Conn}
+	err = tf.WritePkg(data)
+	if err != nil {
+		fmt.Println("UserProcessorError, error=", err)
+		return
+	}
 }

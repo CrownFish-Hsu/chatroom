@@ -7,6 +7,13 @@ const (
 	LoginResponseMessageType    = "LoginResponseMessage"
 	RegisterMessageType         = "RegisterMessage"
 	RegisterResponseMessageType = "RegisterResponseMessage"
+	NotifyUserStatusMessageType = "NotifyUserStatusMessage"
+)
+
+const (
+	UserOnline = iota
+	UserOffline
+	UserBusyStatus
 )
 
 type LoginMessage struct {
@@ -33,4 +40,9 @@ type RegisterMessage struct {
 type RegisterResponseMessage struct {
 	Code  int    `json:"code"`
 	Error string `json:"error"`
+}
+
+type NotifyUserStatusMessage struct {
+	UserName string `json:"userName"`
+	Status   int    `json:"status"`
 }
