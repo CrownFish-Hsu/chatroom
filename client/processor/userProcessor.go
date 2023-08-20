@@ -82,6 +82,10 @@ func (this *UserProcessor) Login(username string, password string) (err error) {
 		return err
 	}
 
+	curUser.Conn = conn
+	curUser.UserName = username
+	curUser.UserStatus = message.UserOnline
+
 	//显示当前用户列表
 	for _, v := range loginRes.UserLists {
 		// 过滤显示自己

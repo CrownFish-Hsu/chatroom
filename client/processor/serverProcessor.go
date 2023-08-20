@@ -18,13 +18,17 @@ func showMenu() {
 	fmt.Println("==========4.Exit==================")
 	fmt.Println("Please Select 1-4:")
 	var key int
+	var content string
+	smsp := &SmsProcessor{}
 	fmt.Scanf("%d\n", &key)
 	switch key {
 	case 1:
 		outputOnlineUser()
 		fmt.Println("show user list")
 	case 2:
-		fmt.Println("send message")
+		fmt.Println("send message:")
+		fmt.Scanf("%s\n", &content)
+		smsp.sendGroupMessage(content)
 	case 3:
 		fmt.Println("list message")
 	case 4:
@@ -53,6 +57,8 @@ func serverConnect(conn net.Conn) {
 
 			//2. 保存进client user map
 			updateUserStatus(&notifyUserStatusMessage)
+		case message.SmsMessageType:
+			outputGroupMessage(&mes)
 		default:
 			fmt.Println("mes type undefined, type = ", mes.Type)
 		}

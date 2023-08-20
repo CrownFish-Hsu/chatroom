@@ -8,6 +8,7 @@ const (
 	RegisterMessageType         = "RegisterMessage"
 	RegisterResponseMessageType = "RegisterResponseMessage"
 	NotifyUserStatusMessageType = "NotifyUserStatusMessage"
+	SmsMessageType              = "SmsMessage"
 )
 
 const (
@@ -45,4 +46,9 @@ type RegisterResponseMessage struct {
 type NotifyUserStatusMessage struct {
 	UserName string `json:"userName"`
 	Status   int    `json:"status"`
+}
+
+type SmsMessage struct {
+	Content    string `json:"content"`
+	model.User `json:"user"`
 }

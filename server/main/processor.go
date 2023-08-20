@@ -24,6 +24,9 @@ func (this *Processor) serverProcessMessage(mes *message.Message) (err error) {
 		up := &processor.UserProcessor{Conn: this.Conn}
 		err = up.ServerProcessRegister(mes)
 
+	case message.SmsMessageType:
+		sp := &processor.SmsProcessor{}
+		err = sp.SendGroupMessage(mes)
 	default:
 		fmt.Println("message type is missing...")
 	}
