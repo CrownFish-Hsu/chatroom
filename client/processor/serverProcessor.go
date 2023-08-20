@@ -49,6 +49,7 @@ func serverConnect(conn net.Conn) {
 			return
 		}
 
+		fmt.Println("client serverConnect message=", mes)
 		switch mes.Type {
 		case message.NotifyUserStatusMessageType:
 			//1. 取出NotifyUserStatusMessage
@@ -62,6 +63,5 @@ func serverConnect(conn net.Conn) {
 		default:
 			fmt.Println("mes type undefined, type = ", mes.Type)
 		}
-		fmt.Println("message=", mes)
 	}
 }

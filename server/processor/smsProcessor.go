@@ -28,7 +28,7 @@ func (this *SmsProcessor) SendGroupMessage(mes *message.Message) (err error) {
 
 	// 遍历usersOnline
 	for name, up := range userMgr.onlineUsers {
-		if up.UserName == name {
+		if smsMessage.UserName == name {
 			continue
 		}
 
